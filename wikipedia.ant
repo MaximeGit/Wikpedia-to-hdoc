@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="antscript" default="tg">
+    <target name="tg">
+        <xslt classpath="saxon9he.jar" in="Exemples_wiki/pokemon_fr.xml" out="test.html" style="xslt/wiki_to_hdoc.xsl">
+            <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+        </xslt>
+    </target>
+</project>
