@@ -87,13 +87,13 @@
     <xsl:template match="//h2[not(following-sibling::p intersect following-sibling::h2[1]/preceding-sibling::p)]"/>
     
     <!-- h3: last sub-sections -->
-    <xsl:template match="//h3">
+    <xsl:template match="h3">
         <section>
             <header>
                 <h1><xsl:apply-templates select="node()"/></h1>
             </header>
             <!-- h3 div: text of the sub-section -->
-            <xsl:apply-templates select="(following-sibling::p intersect following-sibling::h2[1]/preceding-sibling::p intersect following-sibling::h3[1]/preceding-sibling::p) | (following-sibling::ul intersect following-sibling::h2[1]/preceding-sibling::ul intersect following-sibling::h3[1]/preceding-sibling::ul)"/>
+            <xsl:apply-templates select="(following-sibling::p intersect following-sibling::h2[1]/preceding-sibling::p intersect following-sibling::h3[1]/preceding-sibling::p) | (following-sibling::ul intersect following-sibling::h2[1]/preceding-sibling::ul intersect following-sibling::h3[1]/preceding-sibling::ul) | (following-sibling::h4 intersect following-sibling::h2[1]/preceding-sibling::h4 intersect following-sibling::h3[1]/preceding-sibling::h4)  | (following-sibling::h5 intersect following-sibling::h2[1]/preceding-sibling::h5 intersect following-sibling::h3[1]/preceding-sibling::h5) | (following-sibling::h6 intersect following-sibling::h2[1]/preceding-sibling::h6 intersect following-sibling::h3[1]/preceding-sibling::h6) | (following-sibling::ol intersect following-sibling::h2[1]/preceding-sibling::ol intersect following-sibling::h3[1]/preceding-sibling::ol) | (following-sibling::dl intersect following-sibling::h2[1]/preceding-sibling::dl intersect following-sibling::h3[1]/preceding-sibling::dl)"/>
             
             <!-- last h3 before next h2 -->
             <xsl:if test="not(following-sibling::h3)">
@@ -112,25 +112,55 @@
         </div>
     </xsl:template>
     
-    
-    
     <!-- ul/li template -->
-    <xsl:template match="ul">
+    <xsl:template match="ul | ol">
         <div>
              <xsl:element name="{local-name()}" namespace="http://www.utc.fr/ics/hdoc/xhtml">
-                 <xsl:apply-templates select="node()" mode="textOnly"/>
+                 <xsl:apply-templates select="node()"/>
              </xsl:element>
         </div>
     </xsl:template>
     
-    <xsl:template match="li" mode="textOnly">
+    <xsl:template match="dl">
+        <div>
+            <ul>
+                <xsl:apply-templates select="dt"/>    
+            </ul>
+        </div>
+    </xsl:template>
+    
+    <xsl:template match="dd" mode="#all">
+        <li>
+            <p><xsl:apply-templates select="node()" mode="textOnly"/></p>
+        </li>
+    </xsl:template>
+    
+    <!-- text followed directly by ul not allowed in li -->
+    <xsl:template match="dt" mode="#all">
+        <li>
+            <p><xsl:value-of select="."/></p>
+            <ul>
+                <xsl:apply-templates select="following-sibling::dd[1]" mode="textOnly"/>
+            </ul>
+        </li>
+    </xsl:template>
+    
+    <xsl:template match="li" mode="#all">
         <xsl:element name="{local-name()}" namespace="http://www.utc.fr/ics/hdoc/xhtml">
             <p><xsl:apply-templates select="node()" mode="textOnly"/></p>
         </xsl:element>
     </xsl:template>
     
+    <!-- text followed directly by ul not allowed in li -->
+    <xsl:template match="li[descendant::ul]" mode="#all">
+        <xsl:element name="{local-name()}" namespace="http://www.utc.fr/ics/hdoc/xhtml">
+            <p><xsl:apply-templates select="descendant::node() intersect descendant::ul[1]/preceding-sibling::node()" mode="textOnly"/></p>
+            <xsl:apply-templates select="descendant::ul" mode="textOnly"/>
+        </xsl:element>
+    </xsl:template>
+    
     <!-- Text elements -->
-    <xsl:template match="p|span|i" mode="textOnly">
+    <xsl:template match="p|span|i|ul" mode="textOnly">
         <xsl:element name="{local-name()}" namespace="http://www.utc.fr/ics/hdoc/xhtml">
             <xsl:apply-templates select="node()" mode="textOnly"/>
         </xsl:element>
@@ -142,7 +172,13 @@
             <xsl:apply-templates select="node()" mode="textOnly"/>
         </xsl:element>
     </xsl:template>
-    
+
+    <!-- h4, h5 and h6 are small in Wikipedia, so we will only put these titles in em -->
+    <!-- Attention : Les titres et le contenu sont dans 2 divs en faisant cela : à peut-être changer -->
+    <xsl:template match="h4|h5|h6" mode="#all">
+        <div><p><em><xsl:apply-templates select="node()" mode="textOnly"/></em></p></div>
+    </xsl:template>
+
     <!-- Not keeping empty text elements used in Wikipedia -->
     <xsl:template match="span[empty(text())] | p[empty(node())]" mode="#all"/>
     

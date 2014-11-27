@@ -10,7 +10,37 @@
                         <scenarioAssociation-array>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>Exemples_wiki/manga_fr.xmk.xml</String>
+                                    <String>Exemples_wiki/south_african_labour_law_en.xml</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>wikipedia_xhtml_to_hdoc</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XSL</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>Exemples_wiki/langage_prog_fr.xml</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>wikipedia_xhtml_to_hdoc</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XSL</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>Exemples_wiki/dents_jp.xml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -40,7 +70,7 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>Exemples_wiki/pokemon_fr.xml</String>
+                                    <String>Exemples_wiki/barcelona_es.xml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
@@ -55,7 +85,22 @@
                             </scenarioAssociation>
                             <scenarioAssociation>
                                 <field name="url">
-                                    <String>Exemples_wiki/barcelona_es.xml</String>
+                                    <String>Exemples_wiki/manga_fr.xmk.xml</String>
+                                </field>
+                                <field name="scenarioIds">
+                                    <list>
+                                        <String>wikipedia_xhtml_to_hdoc</String>
+                                    </list>
+                                </field>
+                                <field name="scenarioTypes">
+                                    <list>
+                                        <String>XSL</String>
+                                    </list>
+                                </field>
+                            </scenarioAssociation>
+                            <scenarioAssociation>
+                                <field name="url">
+                                    <String>Exemples_wiki/pokemon_fr.xml</String>
                                 </field>
                                 <field name="scenarioIds">
                                     <list>
