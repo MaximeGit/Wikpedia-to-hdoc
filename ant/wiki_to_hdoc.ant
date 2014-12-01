@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="wikiToHdoc" default="main" basedir="..">
+    
+    <property name="filename">default</property>
+    <property name="fileExtension">xml</property>
+    <property name="file" value="${filename}.${fileExtension}"/>
+    
+    <target name="main">
+        <xslt classpath="ant/saxon9he.jar" in="${basedir}/Exemples_wiki/${file}" out="${basedir}/ant/tmp/${filename}_prepared.xml" style="${basedir}/xslt/Definitif/prepare_wiki_to_hdoc.xsl">
+            <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+        </xslt>
+        <xslt classpath="ant/saxon9he.jar" in="${basedir}/ant/tmp/${filename}_prepared.xml" out="${basedir}/ant/result/${filename}.html" style="${basedir}/xslt/Definitif/wiki_to_hdoc.xsl">
+            <factory name="net.sf.saxon.TransformerFactoryImpl"/>
+        </xslt>
+        <delete file="${basedir}/ant/tmp/${filename}_prepared.xml"/>        
+    </target>
+</project>
