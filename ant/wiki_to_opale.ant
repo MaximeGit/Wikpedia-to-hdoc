@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="wikiToOpale" default="main" basedir="..">
+    
+    <!-- filename is the only required parameter to run the script -->
+    <property name="filename">default</property>
+    
+    <!-- file extension and file complete name -->
+    <property name="fileExtension">xml</property>
+    <property name="file" value="${filename}.${fileExtension}"/>
+    
+    <!-- Folder paths -->
+    <property name="wikipediaFilesFolderPath" value="${basedir}/Exemples_wiki"/>
+    <property name="antFolderPath" value="${basedir}/ant"/>
+    <property name="tmpFolderPath" value="${basedir}/ant/tmp"/>
+    <property name="resultFolderPath" value="${basedir}/ant/result"/>
+    <property name="xsltFolderPath" value="${basedir}/xslt"/>
+    
+    <target name="main">
+        <!-- First wiki to Hdoc -->
+        <ant antfile="${antFolderPath}/wiki_to_hdoc.ant"/>
+        
+        <!-- Then hdoc to opale -->
+    <!--    <ant antfile="${basedir}/hdoc_to_opale/hdoc_to_opale.ant">
+            <property name="InputPath" value="${antFolderPath}/result/${filename}.hdoc"/>
+            <property name="OutputPath" value="${antFolderPath}/result/${filename}.scar"/>
+        </ant>-->
+    </target>
+</project>

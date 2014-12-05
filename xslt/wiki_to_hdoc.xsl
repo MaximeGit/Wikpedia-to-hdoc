@@ -66,7 +66,7 @@
     <!-- Wikipedia sections and subsections -->
     <xsl:template match="h2|h3|h4|h5">
         <section>
-            <!-- h2 sections are opale "grains" -->
+            <!-- h3 sections are opale "grains" -->
             <xsl:if test="self::h3">
                 <xsl:attribute name="data-hdoc-type">unit-of-content</xsl:attribute>
             </xsl:if>

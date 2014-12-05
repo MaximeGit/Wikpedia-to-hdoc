@@ -13,9 +13,20 @@
     <property name="tmpFolderPath" value="${basedir}/ant/tmp"/>
     <property name="resultFolderPath" value="${basedir}/ant/result"/>
     <property name="xsltFolderPath" value="${basedir}/xslt"/>
+    <property name="xsltFolderPath" value="${basedir}/xslt"/>
+    <property name="hdocResultPath" value="hdocResult"/>
     
     <target name="main">
-        <!-- Creating tmp directory for tmp files -->
+        <antcall target="prepare"/>
+        <antcall target="prepareHdocStructure"/>
+        <antcall target="transformWikiToHdoc"/>
+        <antcall target="zip"/>
+        <antcall target="clean"/>
+    </target>
+    
+    
+    <target name="prepare">
+        <!-- Create tmp directory for tmp files and result directory if does not exist -->
         <mkdir dir="${tmpFolderPath}"/>
         <mkdir dir="${resultFolderPath}"/>
         
@@ -23,13 +34,31 @@
         <xslt classpath="ant/saxon9he.jar" in="${wikipediaFilesFolderPath}/${file}" out="${tmpFolderPath}/${filename}_prepared.xml" style="${xsltFolderPath}/prepare_wiki_to_hdoc.xsl">
             <factory name="net.sf.saxon.TransformerFactoryImpl"/>
         </xslt>
-        
+    </target>
+    
+    <target name="transformWikiToHdoc">
         <!-- Applying wikipedia -> hdoc -->
         <xslt classpath="ant/saxon9he.jar" in="${tmpFolderPath}/${filename}_prepared.xml" out="${resultFolderPath}/${filename}.html" style="${xsltFolderPath}/wiki_to_hdoc.xsl">
             <factory name="net.sf.saxon.TransformerFactoryImpl"/>
         </xslt>
         
-        <!-- Deleting tmp directory -->
-        <delete dir="${tmpFolderPath}"/>        
+        <!-- Copy of the html file, hdoc needs "container.xml" file, not a html. The html file can be useful to the user -->
+        <copy file="${resultFolderPath}/${filename}.html" tofile="${hdocResultPath}/content.xml"/>
+    </target>
+    
+    <!-- Make hdoc file -->
+    <target name="zip">
+        <zip destfile="${resultFolderPath}/${filename}.hdoc" basedir="${hdocResultPath}"/>
+    </target>
+
+    <!-- Create the hdoc structure -->
+    <target name="prepareHdocStructure">
+        <copydir src="hdocStructure" dest="${hdocResultPath}"/>
+    </target>
+    
+    <!-- Delete tmp directory -->
+    <target name="clean">
+        <delete dir="${tmpFolderPath}"/>
+        <delete dir="${hdocResultPath}"/>
     </target>
 </project>
