@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="wikiToHdoc" default="main" basedir="..">
     
-    <!-- filename is the only required parameter to run the script -->
-    <property name="filename">default</property>
-    
-    <!-- file extension and file complete name -->
-    <property name="fileExtension">xml</property>
-    <property name="file" value="${filename}.${fileExtension}"/>
+    <!-- inputFile is the only required parameter to run the script -->
+    <property name="inputFile"               value="source.xml"/>
+    <basename property="filename"            file="${inputFile}" suffix=".xml"/>
     
     <!-- Folder paths -->
-    <property name="wikipediaFilesFolderPath" value="${basedir}/Exemples_wiki"/>
-    <property name="tmpFolderPath" value="${basedir}/ant/tmp"/>
-    <property name="resultFolderPath" value="${basedir}/ant/result"/>
-    <property name="xsltFolderPath" value="${basedir}/xslt"/>
-    <property name="xsltFolderPath" value="${basedir}/xslt"/>
-    <property name="hdocResultPath" value="hdocResult"/>
+    <!-- tmp paths (removed at the end of the process) -->
+    <property name="tmpFolderPath"           value="${basedir}/tmp"/>
+    <property name="tmpHdocResultFolderPath" value="${tmpFolderPath}/hdoc"/>
+    <!-- ant and xslt paths -->
+    <property name="resultFolderPath"        value="${basedir}/result"/>
+    <property name="xsltFolderPath"          value="${basedir}/xslt"/>
+    <!-- result path -->
+    <property name="hdocResultPath"          value="${resultFolderPath}/${filename}"/>
     
+    <!-- Main target -->
     <target name="main">
         <antcall target="prepare"/>
         <antcall target="prepareHdocStructure"/>
@@ -24,41 +24,39 @@
         <antcall target="clean"/>
     </target>
     
-    
     <target name="prepare">
         <!-- Create tmp directory for tmp files and result directory if does not exist -->
-        <mkdir dir="${tmpFolderPath}"/>
-        <mkdir dir="${resultFolderPath}"/>
+        <mkdir dir="${tmpHdocResultFolderPath}"/>
+        <mkdir dir="${hdocResultPath}"/>
         
         <!-- Making tmp xml wikipedia file without some elements which are not useful -->
-        <xslt classpath="ant/saxon9he.jar" in="${wikipediaFilesFolderPath}/${file}" out="${tmpFolderPath}/${filename}_prepared.xml" style="${xsltFolderPath}/prepare_wiki_to_hdoc.xsl">
+        <xslt classpath="ant/saxon9he.jar" in="ant/${inputFile}" out="${tmpFolderPath}/${filename}_prepared.xml" style="${xsltFolderPath}/prepare_wiki_to_hdoc.xsl">
             <factory name="net.sf.saxon.TransformerFactoryImpl"/>
         </xslt>
+    </target>
+    
+    <!-- Create the hdoc structure of the new file -->
+    <target name="prepareHdocStructure">
+        <copydir src="hdocStructure" dest="${tmpHdocResultFolderPath}"/>
     </target>
     
     <target name="transformWikiToHdoc">
         <!-- Applying wikipedia -> hdoc -->
-        <xslt classpath="ant/saxon9he.jar" in="${tmpFolderPath}/${filename}_prepared.xml" out="${resultFolderPath}/${filename}.html" style="${xsltFolderPath}/wiki_to_hdoc.xsl">
+        <xslt classpath="ant/saxon9he.jar" in="${tmpFolderPath}/${filename}_prepared.xml" out="${hdocResultPath}/${filename}.html" style="${xsltFolderPath}/wiki_to_hdoc.xsl">
             <factory name="net.sf.saxon.TransformerFactoryImpl"/>
         </xslt>
         
         <!-- Copy of the html file, hdoc needs "container.xml" file, not a html. The html file can be useful to the user -->
-        <copy file="${resultFolderPath}/${filename}.html" tofile="${hdocResultPath}/content.xml"/>
+        <copy file="${hdocResultPath}/${filename}.html" tofile="${tmpHdocResultFolderPath}/content.xml"/>
     </target>
     
     <!-- Make hdoc file -->
     <target name="zip">
-        <zip destfile="${resultFolderPath}/${filename}.hdoc" basedir="${hdocResultPath}"/>
-    </target>
-
-    <!-- Create the hdoc structure -->
-    <target name="prepareHdocStructure">
-        <copydir src="hdocStructure" dest="${hdocResultPath}"/>
+        <zip destfile="${hdocResultPath}/${filename}.hdoc" basedir="${tmpHdocResultFolderPath}"/>
     </target>
     
     <!-- Delete tmp directory -->
     <target name="clean">
         <delete dir="${tmpFolderPath}"/>
-        <delete dir="${hdocResultPath}"/>
     </target>
 </project>

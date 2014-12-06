@@ -1,28 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="wikiToOpale" default="main" basedir="..">
     
-    <!-- filename is the only required parameter to run the script -->
-    <property name="filename">default</property>
-    
-    <!-- file extension and file complete name -->
-    <property name="fileExtension">xml</property>
-    <property name="file" value="${filename}.${fileExtension}"/>
+    <!-- inputFile is the only required parameter to run the script -->
+    <property name="inputFile"               value="source.xml"/>
+    <basename property="filename"            file="${inputFile}" suffix=".xml"/>
     
     <!-- Folder paths -->
-    <property name="wikipediaFilesFolderPath" value="${basedir}/Exemples_wiki"/>
-    <property name="antFolderPath" value="${basedir}/ant"/>
-    <property name="tmpFolderPath" value="${basedir}/ant/tmp"/>
-    <property name="resultFolderPath" value="${basedir}/ant/result"/>
-    <property name="xsltFolderPath" value="${basedir}/xslt"/>
+    <!-- tmp paths (removed at the end of the process) -->
+    <property name="tmpFolderPath"           value="${basedir}/tmp"/>
+    <property name="tmpHdocResultFolderPath" value="${tmpFolderPath}/hdoc"/>
+    <!-- ant and xslt paths -->
+    <property name="resultFolderPath"        value="${basedir}/result"/>
+    <property name="antFolderPath"           value="${basedir}/ant"/>
+    <property name="xsltFolderPath"          value="${basedir}/xslt"/>
+    <!-- result path -->
+    <property name="hdocResultPath"          value="${resultFolderPath}/${filename}"/>
     
     <target name="main">
-        <!-- First wiki to Hdoc -->
+        <!-- First: wiki to Hdoc -->
         <ant antfile="${antFolderPath}/wiki_to_hdoc.ant"/>
         
-        <!-- Then hdoc to opale -->
-    <!--    <ant antfile="${basedir}/hdoc_to_opale/hdoc_to_opale.ant">
-            <property name="InputPath" value="${antFolderPath}/result/${filename}.hdoc"/>
-            <property name="OutputPath" value="${antFolderPath}/result/${filename}.scar"/>
-        </ant>-->
+        <!-- Then hdoc to opale (important to set the new basedir in order to make it work) -->
+        <ant antfile="${basedir}/hdoc_to_opale/hdoc_to_opale.ant" dir="${basedir}/hdoc_to_opale">
+            <property name="InputPath" value="${hdocResultPath}/${filename}.hdoc"/>
+            <property name="OutputPath" value="${hdocResultPath}/${filename}.scar"/>
+        </ant>
     </target>
 </project>
