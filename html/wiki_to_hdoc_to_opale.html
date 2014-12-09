@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Wikipedia to Hdoc</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>Wikipedia to Hdoc / Wikipedia to Opale converter</h1>
+        </div>
+        <hr/>
+        <div class="col-md-12">
+            <ul class="nav nav-tabs nav-justified" role="tablist">
+                <li role="presentation" class="active"><a href="#intro" role="tab" data-toggle="tab">Introduction</a></li>
+                <li role="presentation"><a href="#doc" role="tab" data-toggle="tab">Download & documentation</a></li>
+                <li role="presentation"><a href="#issues" role="tab" data-toggle="tab">Issues</a></li>
+            </ul>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade in active" id="intro">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <dl>
+                                <dt><h3 class="text-info">What is Hdoc?</h3></dt>
+                                <dd>
+                                    <p>Hdoc is a generic XML schema based on XHTML5 for documentary purpose.</p>
+                                    <p>
+                                        If you have any questions regarding Hdoc format, please take a look at <a href="http://ics.utc.fr/hdoc/www/co/hdocConverter.html">http://ics.utc.fr/hdoc/www/co/hdocConverter.html</a>
+                                    </p>
+                                </dd>
+                                </dt>
+                                <dt><h3 class="text-info">What is Wikipedia to Hdoc?</h3></dt>
+                                <dd>
+                                    <p>
+                                        This project aims at providing documentary community with a converter that goes from Wikipedia to the new Hdoc format. Once one obtained an Hdoc zip, it is possible to go from Hdoc to any other format the community will propose a converter for.
+                                    </p>
+                                </dd>
+                                </dt>
+                                <dt><h3 class="text-info">I am interested in an Opale scar file, is Wikipedia to Opale released?</h3></dt>
+                                <dd>
+                                    <p>The community has been working on a Hdoc to Opale converter. We were able to test it with several Hdoc zips obtained from Wikipedia to Hdoc converter and we think the result is quite good, though it still has to be improved. So yes, Wikipedia to Opale is possible (go to download and documentation tab for this).</p>
+                                </dd>
+                                </dt>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="doc">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="text-info">Download link</h3>
+                            <p>Here is a link for the <a href="">Wikipedia to Opale converter</a>.</p>
+                            <p>If you are only looking for Wikipedia to Hdoc converter, this converter also outputs Hdoc zip, so this is what you are looking for.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="text-info">How to use it?</h3>
+                            <p>First download the converter link above. Then follow the next steps.</p>
+                            <h4>Getting started</h4>
+                            <p>After downloading the archive containing the converter, unzip it wherever you want. Using a terminal go to the root of the downloaded folder (hdocConverter).</p>
+                            <p>Then go to the ant directory.</p>
+                            <h4>Generating .hdoc, .scar and .html of a Wikipedia article</h4>
+                            <p>In this example, let's say we are going to generate hdoc, scar and html outputs of the english <a href="http://en.wikipedia.org/wiki/Bread">bread</a> article from Wikipedia.</p>
+                            <ol>
+                                <li><p>Copy the URL of the Wikipedia file you want to convert. In our example, it is http://en.wikipedia.org/wiki/Bread .</p></li>
+                                <li><p>Choose a name for the outputs. For the english bread example, let's say we want our exports to be named <i>bread_en</i>.hdoc/.scar/.html, so we will choose "bread_en" as a name.</p></li>
+                                <li>
+                                    <p>You will have to run a command like the following:</p>
+                                    <pre>ant -buildfile wiki_to_opale_fetcher.ant -DwikipediaUrl "<span class="text-danger">yourWikipediaUrl</span>" -Dfilename <span class="text-danger">yourFilename</span></pre>
+                                    <p>Red words are parameters you will have to change everytime you want to obtain an export:</p>
+                                    <ul>
+                                        <li><span class="text-danger">yourWikipediaUrl</span> is the Wikipedia URL you copied earlier.</li>
+                                        <li><span class="text-danger">yourFilename</span> is the name of the output files.</li>
+                                    </ul>
+                                    <p>In the english bread article example, here is the command we would execute:</p>
+                                    <pre>ant -buildfile wiki_to_opale_fetcher.ant -DwikipediaUrl "<span class="text-danger">http://en.wikipedia.org/wiki/Bread</span>" -Dfilename <span class="text-danger">bread_en</span></pre>
+                                    <p>This will generate for you: bread_en.hdoc, bread_en.scar, bread_en.html (and also bread_en.xml which is Wikipedia xhtml if you want to use it).</p>
+                                </li>
+                            </ol>
+                            <h4>Obtaining your new exports</h4>
+                            <p>Exports are generated in a folder called result. result will be generated at the root of the wikipedia_to_hdoc folder.</p>
+                            <p>One folder by export will be created.</p>
+                            <p>In the bread example, exports will be generated in <b>wikipedia_to_hdoc/result</b>/bread_en.</p>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade in active" id="issues">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <dl>
+                                <dt><h3 class="text-info">Images and table are not copied</h3></dt>
+                                <dd>
+                                    <p>Some elements are not processed. Images and tables are currently not copied. This is why some problems while trying to export might occur depending on which page you want to export...</p>
+                                </dd>
+                                </dt>
+                                <dt><h3 class="text-info">Random errors might occur</h3></dt>
+                                <dd>
+                                    <p>Wikipedia is a great tool: everyone can participe. However, it does not provide contributors with best practices that everyone follows. The result is a lot of different ways to write articles. This is why this converter might not handle some situations, and it might not be able to output some Wikipedia articles at its current state.</p>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

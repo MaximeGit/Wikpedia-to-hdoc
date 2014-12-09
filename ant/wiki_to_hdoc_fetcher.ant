@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="wikiToHdoc" default="main" basedir="..">
     
-    <!-- inputFile is the only required parameter to run the script -->
-    <property name="inputFile"               value="source.xml"/>
-    <basename property="filename"            file="${inputFile}" suffix=".xml"/>
+    <!-- wikipediaUrl and destination are the only required parameters -->
+    <property name="wikipediaUrl"            value=""/>
+    <property name="filename"                value=""/>
     
     <!-- Folder paths -->
     <!-- tmp paths (removed at the end of the process) -->
@@ -14,6 +14,8 @@
     <property name="xsltFolderPath"          value="${basedir}/xslt"/>
     <!-- result path -->
     <property name="hdocResultPath"          value="${resultFolderPath}/${filename}"/>
+    <!-- Downloaded wikipedia html file -->
+    <property name="inputFile"               value="${hdocResultPath}/${filename}.xml"/>
     
     <!-- Main target -->
     <target name="main">
@@ -29,8 +31,14 @@
         <mkdir dir="${tmpHdocResultFolderPath}"/>
         <mkdir dir="${hdocResultPath}"/>
         
+        <!-- Fetching html from wikipedia -->
+        <java fork="true" failonerror="true" jar="${basedir}/javaSources/FetchWikipediaXml.jar">
+            <arg value="${wikipediaUrl}"/>
+            <arg value="${filename}"/>
+        </java>
+        
         <!-- Making tmp xml wikipedia file without some elements which are not useful -->
-        <xslt classpath="ant/saxon9he.jar" in="ant/${inputFile}" out="${tmpFolderPath}/${filename}_prepared.xml" style="${xsltFolderPath}/prepare_wiki_to_hdoc.xsl">
+        <xslt classpath="ant/saxon9he.jar" in="${inputFile}" out="${tmpFolderPath}/${filename}_prepared.xml" style="${xsltFolderPath}/prepare_wiki_to_hdoc.xsl">
             <factory name="net.sf.saxon.TransformerFactoryImpl"/>
         </xslt>
     </target>

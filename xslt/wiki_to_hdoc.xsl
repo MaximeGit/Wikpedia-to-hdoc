@@ -215,7 +215,17 @@
         </xsl:element>
     </xsl:template>
     
+    <!-- b outside p, wrap it into a p (and convert it to em) -->
+    <xsl:template match="b[not(ancestor::p) and not(ancestor::li) and not(ancestor::a)]" mode="textOnly">
+        <p><em><xsl:apply-templates select="node()" mode="textOnly"/></em></p>
+    </xsl:template>
+    
     <!-- Link elements -->
+    <!-- a in title not allowed, only keeping text -->
+    <xsl:template match="h2/span/a | h3/span/a | h4/span/a | h5/span/a | h6/span/a" mode="#all">
+        <xsl:value-of select="."/>
+    </xsl:template>
+    
     <xsl:template match="a" mode="#all">
         <xsl:element name="{local-name()}" namespace="http://www.utc.fr/ics/hdoc/xhtml">
             <xsl:attribute name="href" select="concat('http://wikipedia.org', @href)"/>
@@ -233,8 +243,8 @@
     <!-- Only keeping a with information: we give up page references -->
     <xsl:template match="a[starts-with(@href, '#')]" mode="#all"/>
     
-    <!-- Removing reference sup, they are not useful to us -->
-    <xsl:template match="sup[contains(@class, 'reference')]" mode="#all"/>
+    <!-- Removing Wikipedia internal sup, they are not useful to us (sup are "cite source / reference" etc...) -->
+    <xsl:template match="sup" mode="#all"/>
     
     <!-- Ignoring empty text elements only relevant to Wikipedia -->
     <xsl:template match="p[empty(node())]" mode="#all" priority="2"/>

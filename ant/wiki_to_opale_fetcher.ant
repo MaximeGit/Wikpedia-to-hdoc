@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="wikiToOpale" default="main" basedir="..">
+    
+    <!-- wikipediaUrl and destination are the only required parameters -->
+    <property name="wikipediaUrl"            value=""/>
+    <property name="filename"                value=""/>
+    
+    <!-- Folder paths -->
+    <!-- tmp paths (removed at the end of the process) -->
+    <property name="tmpFolderPath"           value="${basedir}/tmp"/>
+    <property name="tmpHdocResultFolderPath" value="${tmpFolderPath}/hdoc"/>
+    <!-- ant and xslt paths -->
+    <property name="resultFolderPath"        value="${basedir}/result"/>
+    <property name="antFolderPath"           value="${basedir}/ant"/>
+    <property name="xsltFolderPath"          value="${basedir}/xslt"/>
+    <!-- result path -->
+    <property name="hdocResultPath"          value="${resultFolderPath}/${filename}"/>
+    
+    <target name="main">
+        <!-- First: wiki to Hdoc -->
+        <ant antfile="${antFolderPath}/wiki_to_hdoc_fetcher.ant"/>
+        
+        <!-- Then hdoc to opale (important to set the new basedir in order to make it work) -->
+        <ant antfile="${basedir}/hdoc_to_opale/hdoc_to_opale.ant" dir="${basedir}/hdoc_to_opale">
+            <property name="InputPath" value="${hdocResultPath}/${filename}.hdoc"/>
+            <property name="OutputPath" value="${hdocResultPath}/${filename}.scar"/>
+        </ant>
+    </target>
+</project>
