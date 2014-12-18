@@ -24,6 +24,7 @@
         <ant antfile="${basedir}/hdoc_to_opale/hdoc_to_opale.ant" dir="${basedir}/hdoc_to_opale">
             <property name="InputPath" value="${hdocResultPath}/${filename}.hdoc"/>
             <property name="OutputPath" value="${hdocResultPath}/${filename}.scar"/>
+            <property name="OutputPathDivided" value="${hdocResultPath}/${filename}_divided.scar"/>
         </ant>
     </target>
 </project>
